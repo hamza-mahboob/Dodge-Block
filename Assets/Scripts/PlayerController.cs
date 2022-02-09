@@ -40,13 +40,18 @@ public class PlayerController : MonoBehaviour
             if (gameManager.getLife() <= 1)
             {
                 Debug.Log("Time slowed");
-                Time.timeScale = 0.2f;
+                
                 //end game
                 gameManager.disableGame();
                 //show UI
                 gameOverScreen.SetActive(true);
+                Time.timeScale = 0.0f;  //stop game
             }
-
+            if (Time.timeScale != 0.0f)
+            {
+                Time.timeScale = 0.1f;
+                Invoke("RestoreTime", 0.1f);
+            }
             gameManager.reduceLife();
         }
         else if (collision.gameObject.name == "Capsule(Clone)") //bonus object
@@ -55,5 +60,11 @@ public class PlayerController : MonoBehaviour
             gameManager.addBonus();
             Destroy(collision.gameObject);
         }
+    }
+
+    void RestoreTime()
+    {
+        Debug.Log("Restore time called...");
+        Time.timeScale = 1;
     }
 }
